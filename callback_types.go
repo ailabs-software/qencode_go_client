@@ -1,5 +1,9 @@
 package qencode
 
+import (
+  "strconv"
+)
+
 /** @fileoverview Structs for parsing callback. */
 
 type QEncodeStatusVideoMeta struct {
@@ -8,9 +12,21 @@ type QEncodeStatusVideoMeta struct {
 }
 
 type QEncodeStatusVideo struct {
- Url string `json: "url"`
+  Url string `json: "url"`
   Duration string `json: "duration"`
   Meta QEncodeStatusVideoMeta `json: "meta"`
+}
+
+func (sv QEncodeStatusVideo) GetDurationFloat() (float64, error) {
+  return strconv.ParseFloat(sv.Duration, 64)
+}
+
+func (sv QEncodeStatusVideo) GetDurationInt() (int, error) {
+  f, err := sv.GetDurationFloat()
+  if (err != nil) {
+  	return 0, err
+  }
+  return int(f), nil
 }
 
 type QEncodeStatus struct {
